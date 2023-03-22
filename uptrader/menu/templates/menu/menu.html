@@ -1,0 +1,18 @@
+<div>
+  {%for elem in elems%}
+  <div>
+    {%if elem.menu_child_id%}
+    <a href="{%url 'index_route'%}?expanded={{elem.menu_child_id}}&host_menu={{host_menu}}">
+      {{elem.header}}
+    </a>
+    >
+    {%else%}
+    <p>
+      {{elem.header}}
+    </p>
+    {%endif%}
+
+
+  </div>
+  {%endfor%}
+</div>
