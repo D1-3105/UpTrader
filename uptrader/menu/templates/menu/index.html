@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Menu</title>
-</head>
-<body>
+{%extends 'base.html'%}
+
+{%block content%}
 {%load draw_menu%}
-{%draw_menu 'main_menu'%}
-</body>
-</html>
+<div>
+    {%draw_menu 'main_menu'%}
+</div>
+<div>
+    {%draw_menu 'outer'%}
+</div>
+{%endblock%}

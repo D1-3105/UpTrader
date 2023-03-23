@@ -1,5 +1,6 @@
 from django.db import models, connection
 from django.utils.functional import cached_property
+from django.conf import settings
 
 
 class MenuQuerySet(models.QuerySet):
@@ -13,43 +14,25 @@ class MenuQuerySet(models.QuerySet):
             on_ret.append(f'{table_name}.{field_name} = %s')
         return ' '.join(on_ret)
 
-    def elements_by_menu(self, **clauses):
-        """
-            Returns raw queryset with element info
-        """
-        e_table_name = MenuElement.table_name()
-        through_table_name = self.model.elements.through._meta.db_table
-        m_table_name = self.model.table_name()
-        WHERE_CLAUSE = 'WHERE ' + self.flatten_clauses(m_table_name, **clauses)
-        return self.raw(
-            raw_query=
-            f"""
-                -- Select distinctly menu-related ids of menu with such name
-                WITH menu_tmp as (
-                    SELECT DISTINCT menuelement_id FROM {through_table_name} 
-                    LEFT JOIN  {m_table_name}
-                    ON menu_menu.id = {through_table_name}.menu_id
-                    {WHERE_CLAUSE}
-                )
-                -- Select all elements with returned ids
-                SELECT * 
-                FROM {e_table_name}
-                WHERE id IN menu_tmp
-                ORDER BY 'order';
-            """,
-            params=(clauses.values())
-        )
-
 
 class MenuManager(models.Manager):
+
     def get_queryset(self):
         return MenuQuerySet(model=self.model, using=self._db)
 
+    @cached_property
+    def by_name_query(self):
+        with open(settings.BASE_DIR/'menu/queries/menu_by_name.sql', 'r') as f:
+            return f.read()
+
     def elements_by_menu_name(self, menu_name):
         """
-        Proxy to qs
+            Call sql cached property
         """
-        return self.get_queryset().elements_by_menu(menu_name=menu_name)
+        return self.get_queryset().raw(
+            raw_query=self.by_name_query,
+            params=[menu_name]
+        )
 
 
 class Menu(models.Model):
@@ -88,7 +71,7 @@ class ElementManager(models.Manager):
 
     @cached_property
     def tree_query(self):
-        with open('menu/queries/hierarchy_menu.sql', 'r') as sql_holder:
+        with open(settings.BASE_DIR/'menu/queries/hierarchy_menu.sql', 'r') as sql_holder:
             tree_query = str(sql_holder.read())
             assert tree_query
             return tree_query

@@ -11,7 +11,6 @@ class ExpandRequestForm(forms.Form):
         cleaned_data = super().clean()
         if not len(cleaned_data) in [0, 2]:
            raise ValidationError('Invalid request params', code=400)
-        print('DATA', cleaned_data)
         return cleaned_data
 
     class Meta:

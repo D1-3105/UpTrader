@@ -1,18 +1,30 @@
-<div>
-  {%for elem in elems%}
-  <div>
-    {%if elem.menu_child_id%}
-    <a href="{%url 'index_route'%}?expanded={{elem.menu_child_id}}&host_menu={{host_menu}}">
-      {{elem.header}}
-    </a>
-    >
-    {%else%}
-    <p>
-      {{elem.header}}
-    </p>
-    {%endif%}
+{%for elems in queue%}
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+
+    <div class="d-flex justify-content-center">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {%for elem in elems%}
+            <ul class="navbar-nav mr-auto">
 
 
-  </div>
-  {%endfor%}
-</div>
+                {%if elem.menu_child_id%}
+                <li class="nav-item active">
+                    <a class="nav-link dropdown-toggle" href="{%url 'index_route'%}?expanded={{elem.menu_child_id}}&host_menu={{host_menu}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{elem.header}}
+                    </a>
+                </li>
+                {%else%}
+                <li class="border">
+                   <a class="nav-link disabled">
+                        {{elem.header}}
+                    </a>
+                </li>
+
+                {%endif%}
+
+            </ul>
+            {%endfor%}
+        </div>
+    </div>
+</nav>
+{%endfor%}
