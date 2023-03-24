@@ -1,6 +1,11 @@
 from django.db import models
+from django.db.models.signals import post_save, pre_delete
+from django.core.files import File
+from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
+
+from io import BytesIO
 
 
 class UserMenu(AbstractUser):
@@ -8,15 +13,10 @@ class UserMenu(AbstractUser):
 
 
 class Page(models.Model):
-    url = models.CharField(max_length=2048)
-    menus = models.ManyToManyField(
-        to='menu.Menu',
-        through='PageToMenu',
-        through_fields=['page', 'menu']
-    )
+    url = models.CharField(max_length=2048, blank=True)
     title = models.TextField(blank=True)
-    template_path = models.FileField(
-        upload_to=settings.BASE_DIR/'menu/templates/menu',
+    template = models.FileField(
+        upload_to=settings.STATIC_ROOT/'templates',
         null=True,
         blank=True
     )
@@ -25,9 +25,18 @@ class Page(models.Model):
         return self.url
 
 
-class PageToMenu(models.Model):
-    order = models.SmallIntegerField()
-    menu = models.ForeignKey(to='menu.Menu', on_delete=models.CASCADE)
-    page = models.ForeignKey(to='Page', on_delete=models.CASCADE)
+@receiver(sender=Page, signal=pre_delete)
+def delete_page_signal(instance, **kwargs):
+    if instance.template:
+        instance.template.delete()
 
-# Create your models here.
+
+@receiver(sender=Page, signal=post_save)
+def on_create(instance, created=False, **kwargs):
+    print(instance.template)
+    if created and not instance.template:
+        with open(settings.BASE_DIR/'menu'/'templates'/'menu'/'index.html', 'rb') as f:
+            in_mem = BytesIO(f.read())
+            instance.template = File(in_mem, 'index.html')
+            instance.save()
+

@@ -30,10 +30,16 @@ def draw_menu(context: 'RequestContext', menu_name: str):
     else:
         elements = [Menu.objects.elements_by_menu_name(menu_name)]
     tmp: template.Template = get_template('menu/menu.html')
+    provide_name = context.get('provide_name', False)
+
     context = {
         'queue': elements,
-        'host_menu': menu_name
+        'host_menu': menu_name,
+        'base_path': context.get('base_url'),
     }
+    if provide_name:
+        context.update({'menu_name': menu_name})
+
     return tmp.render(context)
 
 

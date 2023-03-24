@@ -1,14 +1,11 @@
 from django.contrib import admin
-from django.urls import path
+from .forms import CreatePageForm
+from .models import Page
 
 
-class ModelAdminView(admin.ModelAdmin):
-
-    def get_urls(self):
-        urls = super().get_urls()
-
-        urls += [
-            path('admin/make_index/', )
-        ]
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    change_form_template = 'administrating/custom_admin_view.html'
+    form = CreatePageForm
 
 # Register your models here.

@@ -1,11 +1,22 @@
 {%extends extend_string%}
 <!-- Block content already generated! -->
 {%block staff%}
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <div class="container-fluid">
+    <form action="{{base_url}}" method="post" onsubmit="window.location.reload();">
+        {% csrf_token %}
+        <select class="form-select" name="new_menu">
+            <option selected>{{form.new_menu.label}}</option>
+            {%for menu in form.new_menu%}
+            {{menu}}
+            {%endfor%}
+        </select>
+        <input placeholder="{{form.position.label}}" name="position"/>
+        <button type="submit">Submit!</button>
+    </form>
+  </div>
+</nav>
 
-<form action="{{url}}" method="post">
-    {% csrf_token %}
-    {{form}}
-</form>
 {%endblock%}
 
 
