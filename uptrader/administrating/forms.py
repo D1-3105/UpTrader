@@ -3,18 +3,19 @@ from .models import Page
 from menu.models import Menu
 
 
-class MakeTemplateForm(forms.ModelForm):
-    link = forms.CharField()
-    new_menu = forms.TypedMultipleChoiceField(
-        choices=Menu.objects.all().values_list('id', 'menu_name')
+class MakeTemplateForm(forms.Form):
+    new_menu = forms.TypedChoiceField(
+        choices=Menu.objects.all().values_list('menu_name', 'menu_name')
     )
-    after_menu = forms.TypedMultipleChoiceField()
-
-    def __init__(self, *args, **kwargs):
-        super(MakeTemplateForm, self).__init__(*args, **kwargs)
-        if kwargs.get('after_menus'):
-            self.fields['after_menu'].initial = kwargs.get('after_menus')
+    position = forms.IntegerField(min_value=1)
 
     class Meta:
+        fields = 'new_menu', 'after_menu'
+
+
+class CreatePageForm(forms.ModelForm):
+
+    class Meta:
+        exclude = 'template',
         model = Page
-        fields = '__all__'
+

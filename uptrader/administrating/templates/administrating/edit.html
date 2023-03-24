@@ -3,9 +3,16 @@
 {%block staff%}
 <nav class="navbar fixed-bottom navbar-light bg-light">
   <div class="container-fluid">
-    <form action="{{url}}" method="post">
+    <form action="{{base_url}}" method="post" onsubmit="window.location.reload();">
         {% csrf_token %}
-        {{form}}
+        <select class="form-select" name="new_menu">
+            <option selected>{{form.new_menu.label}}</option>
+            {%for menu in form.new_menu%}
+            {{menu}}
+            {%endfor%}
+        </select>
+        <input placeholder="{{form.position.label}}" name="position"/>
+        <button type="submit">Submit!</button>
     </form>
   </div>
 </nav>

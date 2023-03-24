@@ -1,4 +1,8 @@
-{% extends "admin/base_site.html" %}
-{% block content %}
-<a class="text-info" href="{%url 'editor_external_view' object_id%}">Click here to change on constructor!</a>
+
+{% extends 'admin/change_form.html' %}
+
+{% block after_related_objects %}
+    {% if object_id %}
+        <a class="text-info" href="{%url 'editor_external_view' object_id%}">Click here to change on constructor!</a>
+    {% endif %}
 {% endblock %}

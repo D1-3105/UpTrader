@@ -1,12 +1,11 @@
 from django.contrib import admin
-from django.shortcuts import redirect, reverse
-from django.urls import path
+from .forms import CreatePageForm
 from .models import Page
-from .views import IndexEditorView
 
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
     change_form_template = 'administrating/custom_admin_view.html'
+    form = CreatePageForm
 
 # Register your models here.
