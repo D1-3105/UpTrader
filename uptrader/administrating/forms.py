@@ -5,9 +5,12 @@ from menu.models import Menu
 
 class MakeTemplateForm(forms.Form):
     new_menu = forms.TypedChoiceField(
-        choices=Menu.objects.all().values_list('menu_name', 'menu_name')
     )
     position = forms.IntegerField(min_value=1)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_menu'].choices = Menu.objects.all().values_list('menu_name', 'menu_name')
 
     class Meta:
         fields = 'new_menu', 'after_menu'
