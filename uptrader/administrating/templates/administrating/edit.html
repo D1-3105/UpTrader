@@ -1,11 +1,15 @@
 {%extends extend_string%}
 <!-- Block content already generated! -->
 {%block staff%}
+<nav class="navbar fixed-bottom navbar-light bg-light">
+  <div class="container-fluid">
+    <form action="{{url}}" method="post">
+        {% csrf_token %}
+        {{form}}
+    </form>
+  </div>
+</nav>
 
-<form action="{{url}}" method="post">
-    {% csrf_token %}
-    {{form}}
-</form>
 {%endblock%}
 
 

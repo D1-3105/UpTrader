@@ -1,11 +1,12 @@
 from django import forms
 from .models import Page
+from menu.models import Menu
 
 
 class MakeTemplateForm(forms.ModelForm):
     link = forms.CharField()
     new_menu = forms.TypedMultipleChoiceField(
-        choices=Page.objects.all().values_list('id', 'menu_name')
+        choices=Menu.objects.all().values_list('id', 'menu_name')
     )
     after_menu = forms.TypedMultipleChoiceField()
 
@@ -16,3 +17,4 @@ class MakeTemplateForm(forms.ModelForm):
 
     class Meta:
         model = Page
+        fields = '__all__'

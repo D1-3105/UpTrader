@@ -15,8 +15,8 @@ class Page(models.Model):
         through_fields=['page', 'menu']
     )
     title = models.TextField(blank=True)
-    template_path = models.FileField(
-        upload_to=settings.BASE_DIR/'menu/templates/menu',
+    template = models.FileField(
+        upload_to=settings.STATIC_ROOT/'templates',
         null=True,
         blank=True
     )

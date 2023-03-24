@@ -9,7 +9,7 @@
 
                 {%if elem.menu_child_id%}
                 <li class="nav-item active">
-                    <a class="nav-link dropdown-toggle" href="{%url 'index_route'%}?expanded={{elem.menu_child_id}}&host_menu={{host_menu}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{{base_url}}?expanded={{elem.menu_child_id}}&host_menu={{host_menu}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{elem.header}}
                     </a>
                 </li>

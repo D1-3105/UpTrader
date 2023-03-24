@@ -32,7 +32,8 @@ def draw_menu(context: 'RequestContext', menu_name: str):
     tmp: template.Template = get_template('menu/menu.html')
     context = {
         'queue': elements,
-        'host_menu': menu_name
+        'host_menu': menu_name,
+        'base_path': context.get('base_url')
     }
     return tmp.render(context)
 
